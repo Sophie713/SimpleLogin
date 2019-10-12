@@ -13,11 +13,11 @@ object SharedPrefs {
     }
 
     //shared preferences values
-    var userName: String
+    var userName: String?
         get() = prefs.getString("userName", "")
         set(value) = prefs.edit().putString("userName", value).apply()
 
-    var password: String
+    var password: String?
         get() = prefs.getString("password", "")
         set(value) = prefs.edit().putString("password", value).apply()
 

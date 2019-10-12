@@ -1,18 +1,14 @@
 package com.sophie.simplelogin.app
 
 import android.app.Application
-import android.content.Context
+import com.sophie.simplelogin.utils.MyLogger
 import com.sophie.simplelogin.utils.SharedPrefs
 
-object MyApplication : Application () {
-
-    fun getAppContext(): Context{
-        return this;
-    }
+class MyApplication : Application () {
 
     override fun onCreate() {
         super.onCreate()
-        SharedPrefs.create(this);
+        SharedPrefs.create(this)
+        MyLogger.create(this)
     }
-
 }
