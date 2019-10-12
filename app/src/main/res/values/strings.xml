@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SimpleLogin</string>
     <string name="password">Password</string>
-    <string name="nick_name">Nick name</string><string name="submit">Submit</string>
+    <string name="nick_name">Nick name</string><string name="submit">Submit</string><string name="no_account_yet">You don\'t have any account yet, please choose a nickname and a password.</string><string name="enter_credentials">Please, enter your nickname and your password.</string>
 </resources>

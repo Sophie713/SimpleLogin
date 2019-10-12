@@ -11,13 +11,22 @@ import com.sophie.simplelogin.R
 import com.sophie.simplelogin.constants.Const
 import com.sophie.simplelogin.utils.BaseActivity
 import com.sophie.simplelogin.utils.MyLogger
+import com.sophie.simplelogin.utils.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
 class LoginActivity : BaseActivity() {
 
+    var newAccount = SharedPrefs.userName == "";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (newAccount) {
+            activity_main_tv_no_account.text = resources.getString(R.string.no_account_yet);
+        } else {
+            activity_main_tv_no_account.text = resources.getString(R.string.enter_credentials);
+        }
 
         activity_main_btn_submit.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -59,6 +68,47 @@ class LoginActivity : BaseActivity() {
     }
 
     fun goToCezWebsite() {
+        //get nickname and password
+        val nickname = activity_main_et_nick_name.text.toString()
+        val password = activity_main_et_pass.text.toString()
+
+        if (newAccount) {
+            var nameOk = false
+            var passwordOk = false
+            //check nickname
+            if (nickname.length < 21 && nickname.length > 0)
+                try {
+                    SharedPrefs.userName = nickname
+                    nameOk = true
+                } catch (e: Exception) {
+                    MyLogger.logError("Save nickname error. name: ${nickname} error: ${e.message}")
+                    Toast.makeText(this, "Please enter a valid nickname.", Toast.LENGTH_SHORT).show()
+                    nameOk = false
+                }
+            //check password
+            if (password.length < 21 && password.length > 0)
+                try {
+                    SharedPrefs.password = password
+                    passwordOk = true
+                } catch (e: Exception) {
+                    MyLogger.logError("Save password error. name: ${password} error: ${e.message}")
+                    Toast.makeText(this, "Please enter a valid password.", Toast.LENGTH_SHORT).show()
+                    passwordOk = false
+                }
+            if (nameOk && passwordOk){
+                Toast.makeText(this, "Your credentials were saved.", Toast.LENGTH_SHORT).show()
+                goToWebViewActivity()}
+        } else {
+            if (SharedPrefs.userName == nickname && SharedPrefs.password == password)
+                goToWebViewActivity()
+            else
+                Toast.makeText(this, "Your credentials are incorrect. Please, try again.", Toast.LENGTH_SHORT).show()
+        //todo optional send email here??
+        }
+
+    }
+
+    private fun goToWebViewActivity() {
         startActivity(Intent(this, WebViewActivity::class.java))
     }
 }

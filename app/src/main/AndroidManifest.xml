@@ -16,7 +16,9 @@
             android:theme="@style/AppTheme">
         <activity android:name=".activities.WebViewActivity">
         </activity>
-        <activity android:name=".activities.LoginActivity">
+        <activity
+                android:name=".activities.LoginActivity"
+                android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
