@@ -8,13 +8,12 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.sophie.simplelogin.R
+import com.sophie.simplelogin.constants.Const
 import com.sophie.simplelogin.utils.BaseActivity
 import com.sophie.simplelogin.utils.MyLogger
 import kotlinx.android.synthetic.main.activity_main.*
 
 class LoginActivity : BaseActivity() {
-
-    val PERMISSIONS_REQUEST_INTERNET = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,7 @@ class LoginActivity : BaseActivity() {
                     ActivityCompat.requestPermissions(
                         this,
                         arrayOf(Manifest.permission.INTERNET),
-                        PERMISSIONS_REQUEST_INTERNET
+                        Const.PERMISSIONS_REQUEST_INTERNET
                     )
                 }
             } else {
@@ -51,16 +50,11 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == PERMISSIONS_REQUEST_INTERNET) {
+        if (requestCode == Const.PERMISSIONS_REQUEST_INTERNET) {
             goToCezWebsite()
             MyLogger.log("Internet permission granted ${packageManager.getActivityInfo(this.getComponentName(), 0)}")
         } else {
-            MyLogger.logError(
-                "Internet permission not granted in ${packageManager.getActivityInfo(
-                    this.getComponentName(),
-                    0
-                )}"
-            )
+            MyLogger.logError("Internet permission not granted in ${packageManager.getActivityInfo(this.getComponentName(), 0)}")
         }
     }
 
