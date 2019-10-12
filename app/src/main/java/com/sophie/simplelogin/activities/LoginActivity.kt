@@ -4,6 +4,8 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.sophie.simplelogin.R
+import com.sophie.simplelogin.app.MyApplication
+import com.sophie.simplelogin.utils.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
 class LoginActivity : AppCompatActivity() {
@@ -15,5 +17,7 @@ class LoginActivity : AppCompatActivity() {
         activity_main_btn_submit.setOnClickListener {
             startActivity(Intent(this, WebViewActivity::class.java))
         }
+
+        SharedPrefs.userName = "user one";
     }
 }
