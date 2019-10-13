@@ -23,7 +23,7 @@ class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
+        //old sign in layout: setContentView(R.layout.activity_main)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
@@ -134,7 +134,6 @@ class LoginActivity : BaseActivity() {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build())
 
         // Create and launch sign-in intent
@@ -173,21 +172,5 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-
-    private fun themeAndLogo() {
-        val providers = emptyList<AuthUI.IdpConfig>()
-
-        // [START auth_fui_theme_logo]
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setLogo(R.drawable.notification_bg_low) // Set logo drawable
-                .setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen) // Set theme
-                .build(),
-            Const.RC_SIGN_IN)
-        // [END auth_fui_theme_logo]
     }
 }
