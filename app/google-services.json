@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "847862656013",
+    "firebase_url": "https://simplelogin-cezprojekt.firebaseio.com",
+    "project_id": "simplelogin-cezprojekt",
+    "storage_bucket": "simplelogin-cezprojekt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847862656013:android:47ef2df1562234cd363944",
+        "android_client_info": {
+          "package_name": "com.sophie.simplelogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847862656013-nonq96gj6j7scahqukh2gfklb61565hr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sophie.simplelogin",
+            "certificate_hash": "b890e872acac83a61f5548fd88515754f6c87c12"
+          }
+        },
+        {
+          "client_id": "847862656013-tcrj29ttdkss936st8d8gjgdu53m7056.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC30IQhZWOWzP_WGq1yYdlh-oSdymJX-uA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847862656013-tcrj29ttdkss936st8d8gjgdu53m7056.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

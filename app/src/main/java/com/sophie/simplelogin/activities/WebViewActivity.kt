@@ -3,6 +3,7 @@ package com.sophie.simplelogin.activities
 import android.os.Bundle
 import android.webkit.WebView
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.sophie.simplelogin.R
 import com.sophie.simplelogin.utils.BaseActivity
 import com.sophie.simplelogin.utils.MyLogger
@@ -23,7 +24,7 @@ class WebViewActivity : BaseActivity() {
             webView.settings.javaScriptEnabled = true
             webView.loadUrl("https://www.cez.cz/")
         } catch (e: Exception) {
-            MyLogger.logError("Load WebView error in ${packageManager.getActivityInfo(this.getComponentName(), 0)}")
+            MyLogger.logError("Load WebView error in ${packageManager.getActivityInfo(this.getComponentName(), 0)}", null)
             Toast.makeText(this, "There has been some unexpected error.", Toast.LENGTH_LONG).show()
             onBackPressed()
         }

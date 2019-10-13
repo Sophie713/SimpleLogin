@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.sophie.simplelogin.R
 import com.sophie.simplelogin.constants.Const
 import com.sophie.simplelogin.utils.BaseActivity
+import com.sophie.simplelogin.utils.Firebase
 import com.sophie.simplelogin.utils.MyLogger
 import com.sophie.simplelogin.utils.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
@@ -61,9 +63,9 @@ class LoginActivity : BaseActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == Const.PERMISSIONS_REQUEST_INTERNET) {
             goToCezWebsite()
-            MyLogger.log("Internet permission granted ${packageManager.getActivityInfo(this.getComponentName(), 0)}")
+            MyLogger.log("Internet permission granted ${packageManager.getActivityInfo(this.getComponentName(), 0)}", null)
         } else {
-            MyLogger.logError("Internet permission not granted in ${packageManager.getActivityInfo(this.getComponentName(), 0)}")
+            MyLogger.logError("Internet permission not granted in ${packageManager.getActivityInfo(this.getComponentName(), 0)}", null)
         }
     }
 
@@ -81,7 +83,7 @@ class LoginActivity : BaseActivity() {
                     SharedPrefs.userName = nickname
                     nameOk = true
                 } catch (e: Exception) {
-                    MyLogger.logError("Save nickname error. name: ${nickname} error: ${e.message}")
+                    MyLogger.logError("Save nickname error. name: ${nickname} error: ${e.message}", null)
                     Toast.makeText(this, "Please enter a valid nickname.", Toast.LENGTH_SHORT).show()
                     nameOk = false
                 }
@@ -91,19 +93,22 @@ class LoginActivity : BaseActivity() {
                     SharedPrefs.password = password
                     passwordOk = true
                 } catch (e: Exception) {
-                    MyLogger.logError("Save password error. name: ${password} error: ${e.message}")
+                    MyLogger.logError("Save password error. name: ${password} error: ${e.message}", null)
                     Toast.makeText(this, "Please enter a valid password.", Toast.LENGTH_SHORT).show()
                     passwordOk = false
                 }
-            if (nameOk && passwordOk){
+            if (nameOk && passwordOk) {
                 Toast.makeText(this, "Your credentials were saved.", Toast.LENGTH_SHORT).show()
-                goToWebViewActivity()}
-        } else {
-            if (SharedPrefs.userName == nickname && SharedPrefs.password == password)
+                Firebase.logToFirebase("new user ${SharedPrefs.userName} created an account", FirebaseAnalytics.Event.SIGN_UP)
                 goToWebViewActivity()
-            else
+            }
+        } else {
+            if (SharedPrefs.userName == nickname && SharedPrefs.password == password) {
+                Firebase.logToFirebase("user ${SharedPrefs.userName} logged in", FirebaseAnalytics.Event.LOGIN)
+                goToWebViewActivity()
+            } else
                 Toast.makeText(this, "Your credentials are incorrect. Please, try again.", Toast.LENGTH_SHORT).show()
-        //todo optional send email here??
+            //todo optional send email here??
         }
 
     }
