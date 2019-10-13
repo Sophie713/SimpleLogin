@@ -38,9 +38,11 @@ dependencies {
     implementation ('com.google.firebase:firebase-core:16.0.4'){
         exclude group:'com.android.support'}
     // Add Analytics
-    /*implementation ('com.google.firebase:firebase-analytics:16.0.4'){
-        exclude group:'com.android.support'}*/
-    // Add dependency
+    implementation ('com.google.firebase:firebase-analytics:16.0.4'){
+        exclude group:'com.android.support'}
+    // Add Crashlytics
     implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1'){
         exclude group:'com.android.support'}
+    // Add Authorisation
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 }

@@ -1,29 +1,40 @@
 package com.sophie.simplelogin.activities
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.sophie.simplelogin.R
 import com.sophie.simplelogin.constants.Const
 import com.sophie.simplelogin.utils.BaseActivity
-import com.sophie.simplelogin.utils.Firebase
 import com.sophie.simplelogin.utils.MyLogger
 import com.sophie.simplelogin.utils.SharedPrefs
-import kotlinx.android.synthetic.main.activity_main.*
 
 class LoginActivity : BaseActivity() {
 
-    var newAccount = SharedPrefs.userName == "";
+    // old sign in variable: var newAccount = SharedPrefs.userName == "";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+                Toast.makeText(this, "Sorry, we cannot load the website without internet permission.", Toast.LENGTH_LONG).show()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), Const.PERMISSIONS_REQUEST_INTERNET)
+            }
+        } else {
+            createSignInIntent()
+        }
+        /* old login logic
         if (newAccount) {
             activity_main_tv_no_account.text = resources.getString(R.string.no_account_yet);
         } else {
@@ -57,18 +68,20 @@ class LoginActivity : BaseActivity() {
             } else {
                 goToCezWebsite()
             }
-        }
+        }*/
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == Const.PERMISSIONS_REQUEST_INTERNET) {
-            goToCezWebsite()
+            createSignInIntent()
+            /* old login
+            goToCezWebsite()*/
             MyLogger.log("Internet permission granted ${packageManager.getActivityInfo(this.getComponentName(), 0)}", null)
         } else {
             MyLogger.logError("Internet permission not granted in ${packageManager.getActivityInfo(this.getComponentName(), 0)}", null)
         }
     }
-
+    /* old sign in: login or sign up
     fun goToCezWebsite() {
         //get nickname and password
         val nickname = activity_main_et_nick_name.text.toString()
@@ -111,9 +124,70 @@ class LoginActivity : BaseActivity() {
             //todo optional send email here??
         }
 
-    }
+    }*/
 
     private fun goToWebViewActivity() {
         startActivity(Intent(this, WebViewActivity::class.java))
+    }
+
+    private fun createSignInIntent() {
+        // Choose authentication providers
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+        // Create and launch sign-in intent
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            Const.RC_SIGN_IN)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == Const.RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    SharedPrefs.userName = FirebaseAuth.getInstance().currentUser!!.email.toString()
+                    goToWebViewActivity()
+                    MyLogger.log(SharedPrefs.userName.toString(), null)
+                } catch (e: Exception) {
+                    MyLogger.logError("User login error: ${e.message}", null)
+                }
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                if (response == null)
+                    MyLogger.logError("User login error null response.", null)
+                else {
+                    val e = response.getError()?.getErrorCode()
+                    MyLogger.logError("User login error: ${e.toString()}", null)
+                }
+            }
+        }
+    }
+
+
+    private fun themeAndLogo() {
+        val providers = emptyList<AuthUI.IdpConfig>()
+
+        // [START auth_fui_theme_logo]
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo(R.drawable.notification_bg_low) // Set logo drawable
+                .setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen) // Set theme
+                .build(),
+            Const.RC_SIGN_IN)
+        // [END auth_fui_theme_logo]
     }
 }
