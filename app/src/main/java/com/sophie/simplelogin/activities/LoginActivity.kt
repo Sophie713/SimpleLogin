@@ -158,15 +158,18 @@ class LoginActivity : BaseActivity() {
                     goToWebViewActivity()
                     MyLogger.log(SharedPrefs.userName.toString(), null)
                 } catch (e: Exception) {
+                    Toast.makeText(this, "There has been some error, please try again.", Toast.LENGTH_SHORT).show()
                     MyLogger.logError("User login error: ${e.message}", null)
                 }
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
-                if (response == null)
-                    MyLogger.logError("User login error null response.", null)
+                if (response == null){
+                    Toast.makeText(this, "There has been some error, please try again.", Toast.LENGTH_SHORT).show()
+                    MyLogger.logError("User login error null response.", null)}
                 else {
+                    Toast.makeText(this, "There has been some error, please try again.", Toast.LENGTH_SHORT).show()
                     val e = response.getError()?.getErrorCode()
                     MyLogger.logError("User login error: ${e.toString()}", null)
                 }
